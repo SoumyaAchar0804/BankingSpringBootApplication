@@ -3,6 +3,8 @@ node{
     def tag, dockerHubUser, containerName, httpPort = ""
     
     stage('Prepare Environment'){
+	mavenHome = tool name: 'Maven' , type: 'maven'
+        mavenCMD = "${mavenHome}/bin/mvn"
         echo 'Initialize Environment'
         tag="3.0"
 	withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'dockerUser', passwordVariable: 'dockerPassword')]) {
@@ -23,7 +25,7 @@ node{
     }
     
     stage('Maven Build'){
-        sh "Maven clean package"        
+        sh "${mavenCMD} clean package"              
     }
     
     stage('Docker Image Build'){
